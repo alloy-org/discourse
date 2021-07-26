@@ -286,8 +286,6 @@ task 'javascript:update_constants' => :environment do
 end
 
 task 'javascript:update' => 'clean_up' do
-  require 'uglifier'
-
   yarn = system("yarn install")
   abort('Unable to run "yarn install"') unless yarn
 
@@ -359,11 +357,7 @@ task 'javascript:update' => 'clean_up' do
       STDERR.puts "New dependency added: #{dest}"
     end
 
-    if f[:uglify]
-      File.write(dest, Uglifier.new.compile(File.read(src)))
-    else
-      FileUtils.cp_r(src, dest)
-    end
+    FileUtils.cp_r(src, dest)
 
     # use absolute path for popper.js's sourcemap
     # avoids noisy console warnings in dev environment for non-homepage paths
